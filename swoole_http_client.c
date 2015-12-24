@@ -1053,7 +1053,6 @@ static int http_client_parser_on_message_complete(php_http_parser *parser)
         http->phase = 1;
     }
 
-
     zval *retval;
     zval *zcallback;
 
