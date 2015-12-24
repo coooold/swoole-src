@@ -1001,9 +1001,6 @@ static PHP_METHOD(swoole_http_client, on)
 
 static int http_client_parser_on_header_field(php_http_parser *parser, const char *at, size_t length)
 {
-#if PHP_MAJOR_VERSION < 7
-    TSRMLS_FETCH_FROM_CTX(sw_thread_ctx ? sw_thread_ctx : NULL);
-#endif
     http_client* http = (http_client*)parser->data;
     //zval* zobject = (zval*)http->cli->socket->object;
 
@@ -1015,10 +1012,6 @@ static int http_client_parser_on_header_field(php_http_parser *parser, const cha
 
 static int http_client_parser_on_header_value(php_http_parser *parser, const char *at, size_t length)
 {
-#if PHP_MAJOR_VERSION < 7
-    TSRMLS_FETCH_FROM_CTX(sw_thread_ctx ? sw_thread_ctx : NULL);
-#endif
-
     http_client* http = (http_client*)parser->data;
     zval* zobject = (zval*)http->cli->socket->object;
     
@@ -1036,10 +1029,6 @@ static int http_client_parser_on_header_value(php_http_parser *parser, const cha
 
 static int http_client_parser_on_body(php_http_parser *parser, const char *at, size_t length)
 {
-#if PHP_MAJOR_VERSION < 7
-    TSRMLS_FETCH_FROM_CTX(sw_thread_ctx ? sw_thread_ctx : NULL);
-#endif
-
     http_client* http = (http_client*)parser->data;
     zval* zobject = (zval*)http->cli->socket->object;
     
@@ -1055,9 +1044,6 @@ static int http_client_parser_on_body(php_http_parser *parser, const char *at, s
 
 static int http_client_parser_on_message_complete(php_http_parser *parser)
 {
-#if PHP_MAJOR_VERSION < 7
-    TSRMLS_FETCH_FROM_CTX(sw_thread_ctx ? sw_thread_ctx : NULL);
-#endif
     http_client* http = (http_client*)parser->data;
     zval* zobject = (zval*)http->cli->socket->object;
 
