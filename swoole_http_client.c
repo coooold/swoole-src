@@ -93,7 +93,7 @@ static swClient* http_client_create_socket(zval *object, char *host, int host_le
 
 static zval* http_client_get_cb(zval *zobject, char *cb_name, int cb_name_len TSRMLS_DC);
 static void http_client_set_cb(zval *zobject, char *cb_name, int cb_name_len, zval *zcb TSRMLS_DC);
-static int http_client_check_cb(zval *zobject, char *cb_name, int cb_name_len TSRMLS_DC);
+
 
 static zval* http_client_get_cb(zval *zobject, char *cb_name, int cb_name_len TSRMLS_DC)
 {
@@ -120,18 +120,6 @@ static void http_client_set_cb(zval *zobject, char *cb_name, int cb_name_len, zv
     }
     
     hcc->gc_list[hcc->gc_idx++] = zcb;
-}
-
-static int http_client_check_cb(zval *zobject, char *cb_name, int cb_name_len TSRMLS_DC)
-{
-    zval *cb = http_client_get_cb(zobject, cb_name, cb_name_len TSRMLS_CC);
-    if(!cb)
-    {
-        swoole_php_fatal_error(E_WARNING, "no %s callback was set.", cb_name);
-        return -1;
-    }
-    
-    return 0;
 }
 
 
@@ -876,17 +864,6 @@ static PHP_METHOD(swoole_http_client, execute)
     sock_flag = 1;  //async
 
     ret = http->cli->connect(http->cli, http->host, http->port, http->timeout, sock_flag);
-
- 
-    if(0 != http_client_check_cb(getThis(), ZEND_STRL("finish")) TSRMLS_CC)
-    {
-        RETURN_FALSE;
-    }
-    
-    if(0 != http_client_check_cb(getThis(), ZEND_STRL("error")) TSRMLS_CC)
-    {
-        RETURN_FALSE;
-    }
 
     //printf("errorno %d  EINPROGRESS %d ret %d\n", errno, EINPROGRESS, ret);
 
