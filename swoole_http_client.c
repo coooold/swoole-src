@@ -88,7 +88,7 @@ static int http_client_onError(swReactor *reactor, swEvent *event);
 static void http_swClient_check_setting(swClient *cli, zval *zset TSRMLS_DC);
 static int http_client_error_callback(zval *zobject, swEvent *event, int error TSRMLS_DC);
 static int http_client_send_http_request(zval *zobject TSRMLS_DC);
-static http_client* http_client_create(zval *object);
+static http_client* http_client_create(zval *object TSRMLS_DC);
 static swClient* http_client_create_socket(zval *object, char *host, int host_len, int port);
 
 static zval* http_client_get_cb(zval *zobject, char *cb_name, int cb_name_len TSRMLS_DC);
@@ -596,7 +596,7 @@ static void php_http_client_swoole_check_reactor()
     SwooleWG.reactor_init = 1;
 }
 
-static http_client* http_client_create(zval *object){
+static http_client* http_client_create(zval *object TSRMLS_DC){
     zval *ztmp;
     http_client *http;
     HashTable *vht;
@@ -653,7 +653,7 @@ static swClient* http_client_create_socket(zval *object, char *host, int host_le
 {
     int async = 1;
     char conn_key[SW_LONG_CONNECTION_KEY_LEN];
-    int conn_key_len = 0;
+    //int conn_key_len = 0;
 
 
 #if PHP_MAJOR_VERSION < 7
@@ -666,7 +666,7 @@ static swClient* http_client_create_socket(zval *object, char *host, int host_le
     swClient* cli = (swClient*) emalloc(sizeof(swClient));
 
     bzero(conn_key, SW_LONG_CONNECTION_KEY_LEN);
-    conn_key_len = snprintf(conn_key, SW_LONG_CONNECTION_KEY_LEN, "%s:%d", host, port) + 1;
+    //conn_key_len = snprintf(conn_key, SW_LONG_CONNECTION_KEY_LEN, "%s:%d", host, port) + 1;
     
 
     if (swClient_create(cli, php_swoole_socktype(type), async) < 0)
@@ -831,7 +831,7 @@ static PHP_METHOD(swoole_http_client, execute)
     }
     else
     {
-        http = http_client_create(getThis());
+        http = http_client_create(getThis() TSRMLS_CC);
     }
 
     if(http == NULL)
