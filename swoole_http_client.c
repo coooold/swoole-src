@@ -726,7 +726,7 @@ static PHP_METHOD(swoole_http_client, __construct)
     
     zval *body;
     SW_MAKE_STD_ZVAL(body);
-    ZVAL_STRING(body,"",1);
+    SW_ZVAL_STRING(body,"",1);
     zend_update_property(
         swoole_http_client_class_entry_ptr,
         getThis(), ZEND_STRL("body"), body TSRMLS_CC);
@@ -1023,7 +1023,7 @@ static int http_client_parser_on_body(php_http_parser *parser, const char *at, s
     zval *body = sw_zend_read_property(swoole_http_client_class_entry_ptr, zobject, ZEND_STRL("body"), 0 TSRMLS_CC);
     zval *tmp;
     SW_MAKE_STD_ZVAL(tmp);
-    ZVAL_STRINGL(tmp, at, length, 1);
+    SW_ZVAL_STRINGL(tmp, at, length, 1);
     add_string_to_string(body, body, tmp);
     sw_zval_ptr_dtor(&tmp);
 
